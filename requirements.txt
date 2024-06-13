@@ -1,4 +1,4 @@
 fastapi==0.100.1
 uvicorn[standard]==0.23.2
-fastapi-users[sqlalchemy]==6.0.1
+fastapi-users[sqlalchemy]
 aiosqlite==0.20.0
