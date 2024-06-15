@@ -26,7 +26,7 @@ export default function SignUpPage() {
     if (response.ok) {
       // Handle successful signup, e.g., redirect to a login page
       console.log('Signup successful', data);
-      router.push('/login'); // Assuming you have a login page set up
+      router.push('/signin'); // Assuming you have a login page set up
     } else {
       // Handle signup error
       console.error('Signup failed', data);
@@ -36,7 +36,7 @@ export default function SignUpPage() {
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="w-full max-w-md p-8 bg-white rounded shadow-md">
-        <h2 className="mb-6 text-2xl font-semibold text-center">Sign Up</h2>
+        <h2 className="mb-6 text-2xl text-white font-semibold text-center">Sign Up</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-600">Name</label>
