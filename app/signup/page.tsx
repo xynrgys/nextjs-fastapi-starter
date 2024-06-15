@@ -1,13 +1,17 @@
-import { useState, FormEvent } from 'react';
+// app/signup/page.tsx
+
+'use client'
+
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 
-const SignUp = () => {
+export default function SignUpPage() {
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const router = useRouter();
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const response = await fetch('/api/auth/signup', {
@@ -22,7 +26,7 @@ const SignUp = () => {
     if (response.ok) {
       // Handle successful signup, e.g., redirect to a login page
       console.log('Signup successful', data);
-      router.push('/login');
+      router.push('/login'); // Assuming you have a login page set up
     } else {
       // Handle signup error
       console.error('Signup failed', data);
@@ -30,7 +34,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen">
       <div className="w-full max-w-md p-8 bg-white rounded shadow-md">
         <h2 className="mb-6 text-2xl font-semibold text-center">Sign Up</h2>
         <form onSubmit={handleSubmit}>
@@ -80,6 +84,4 @@ const SignUp = () => {
       </div>
     </div>
   );
-};
-
-export default SignUp;
+}
