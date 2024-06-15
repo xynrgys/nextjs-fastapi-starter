@@ -14,7 +14,7 @@ export default function SignInPage() {
     e.preventDefault();
 
     try {
-      const response = await fetch('/api/auth/signin', {
+      const response = await fetch('/auth/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
