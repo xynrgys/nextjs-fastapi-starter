@@ -1,10 +1,11 @@
-// pages/signup.tsx
 import { useState, FormEvent } from 'react';
+import { useRouter } from 'next/router';
 
-export default function SignUp() {
+const SignUp = () => {
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const router = useRouter();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -19,8 +20,9 @@ export default function SignUp() {
 
     const data = await response.json();
     if (response.ok) {
-      // Handle successful signup
+      // Handle successful signup, e.g., redirect to a login page
       console.log('Signup successful', data);
+      router.push('/login');
     } else {
       // Handle signup error
       console.error('Signup failed', data);
@@ -78,4 +80,6 @@ export default function SignUp() {
       </div>
     </div>
   );
-}
+};
+
+export default SignUp;
