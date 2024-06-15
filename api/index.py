@@ -26,23 +26,10 @@ def login(request: LoginRequest):
 
 @app.post('/auth/signup')
 def signup(request: SignupRequest):
-    # Create a new user in Supabase auth
-    auth_response = supabase.auth.sign_up(email=request.email, password=request.password)
-    if auth_response['error']:
-        raise HTTPException(status_code=400, detail=auth_response['error']['message'])
-    
-    user_id = auth_response['data']['user']['id']
-
-    # Insert additional user information into the profiles table
-    user_response = supabase
-        .from_('profiles')
-        .insert({'id': user_id, 'email': request.email, 'name': request.name})
-        .execute()
-    
-    if user_response['error']:
-        raise HTTPException(status_code=400, detail=user_response['error']['message'])
-    
-    return {'message': 'User signed up successfully'}
+    response = supabase.auth.sign_up(email=request.email, password=request.password)
+    if response['error']:
+        raise HTTPException(status_code=400, detail=response['error']['message'])
+    return response['data']
 
 @app.get("/api/python")
 def hello_world():

@@ -1,22 +1,21 @@
 import Image from "next/image";
-import Link from "next/link";
+import Link from 'next/link';
 
-const Home = () => {
+export default function HomePage() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 bg-white rounded shadow-md">
-        <h2 className="mb-6 text-2xl font-semibold text-center text-blue-600">Welcome to Our Site</h2>
-        <p className="mb-4 text-center text-blue-500">To get started, please sign up.</p>
-        <div className="flex justify-center">
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="text-center">
+        <h1 className="text-3xl text-black font-semibold mb-6">Welcome to Your Next.js App</h1>
+        <p className="text-lg text-gray-600 mb-6">Explore and enjoy the features of this app.</p>
+        <div className="space-x-4">
+          <Link href="/signin">
+            <a className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition duration-200">Sign In</a>
+          </Link>
           <Link href="/signup">
-            <a className="px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-              Sign Up
-            </a>
+            <a className="inline-block px-6 py-3 bg-green-600 text-white rounded-lg text-sm font-semibold hover:bg-green-700 transition duration-200">Sign Up</a>
           </Link>
         </div>
       </div>
     </div>
   );
-};
-
-export default Home;
+}
