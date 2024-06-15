@@ -40,7 +40,7 @@ export default function SignInPage() {
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="w-full max-w-md p-8 bg-white rounded shadow-md">
-        <h2 className="mb-6 text-2xl text-white font-semibold text-center">Sign In</h2>
+        <h2 className="mb-6 text-2xl text-black font-semibold text-center">Sign In</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-600">Email</label>
