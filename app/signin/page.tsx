@@ -13,8 +13,12 @@ export default function SignInPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const URL = process.env.NEXT_PUBLIC_VERCEL_URL
+  ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api`
+  : "http://localhost:3000/api";
+
     try {
-      const response = await fetch('http://localhost:3000/auth/login', {
+      const response = await fetch('${URL}/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

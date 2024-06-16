@@ -14,7 +14,11 @@ export default function SignUpPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const response = await fetch('http://localhost:3000/api/auth/signup', {
+    const URL = process.env.NEXT_PUBLIC_VERCEL_URL
+      ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api`
+      : "http://localhost:3000/api";
+
+    const response = await fetch('${URL}/api/auth/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

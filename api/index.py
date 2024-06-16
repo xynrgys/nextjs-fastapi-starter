@@ -17,14 +17,14 @@ def user_exists(key: str = "email", value: str = None):
     user = supabase.from_("users").select("*").eq(key, value).execute()
     return len(user.data) > 0
 
-@app.post('/auth/login')
+@app.post('/api/auth/login')
 def login(request: LoginRequest):
     response = supabase.auth.sign_in(email=request.email, password=request.password)
     if response['error']:
         raise HTTPException(status_code=400, detail=response['error']['message'])
     return response['data']
 
-@app.post('/auth/signup')
+@app.post('/api/auth/signup')
 def signup(request: SignupRequest):
     response = supabase.auth.sign_up(email=request.email, password=request.password)
     if response['error']:
