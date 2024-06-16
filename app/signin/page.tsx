@@ -14,11 +14,11 @@ export default function SignInPage() {
     e.preventDefault();
 
     const URL = process.env.NEXT_PUBLIC_VERCEL_URL
-  ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api`
-  : "http://localhost:3000/api";
+      ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+      : "http://localhost:3000";
 
     try {
-      const response = await fetch('${URL}/auth/login', {
+      const response = await fetch(URL+'/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
