@@ -14,13 +14,16 @@ def user_exists(key: str = "email", value: str = None):
     return len(user.data) > 0
 
 class SignupRequest(BaseModel):
-    name: str
     email: str
     password: str
 
 class LoginRequest(BaseModel):
     email: str
     password: str
+
+@app.options("/api/auth/signup")
+def catch_options():
+    return {"message": "OK"}
 
 @app.get("/api/python")
 def hello_world():
