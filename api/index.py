@@ -1,16 +1,29 @@
 from fastapi import FastAPI, HTTPException, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from typing import Union
 from supabase import create_client, Client
 from app.models import LoginRequest, SignupRequest
 import bcrypt
 import os
 
+origins = [
+    "http://localhost:3000",  # Add the origin(s) you want to allow
+]
 
 url: str = os.environ.get("SUPABASE_URL")
 key: str = os.environ.get("SUPABASE_KEY")
 supabase: Client = create_client(url, key)
 
 app = FastAPI()
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def user_exists(key: str = "email", value: str = None):
     user = supabase.from_("users").select("*").eq(key, value).execute()
