@@ -9,9 +9,9 @@ key: str = os.environ.get("SUPABASE_KEY")
 app = FastAPI()
 supabase: Client = create_client(url, key)
 
-def user_exists(key: str = "email", value: str = None):
-    user = supabase.from_("users").select("*").eq(key, value).execute()
-    return len(user.data) > 0
+# def user_exists(key: str = "email", value: str = None):
+#     user = supabase.from_("users").select("*").eq(key, value).execute()
+#     return len(user.data) > 0
 
 @app.get("/api/python")
 def hello_world():
