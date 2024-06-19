@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from supabase import create_client, Client
-from app.models import SignupRequest
+# from app.models import SignupRequest
 import os
 
 url: str = os.environ.get("SUPABASE_URL")
