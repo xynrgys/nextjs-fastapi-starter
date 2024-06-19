@@ -1,6 +1,5 @@
 from fastapi import FastAPI, HTTPException
 from supabase import create_client, Client
-from pydantic import BaseModel
 from app.models import SignupRequest
 import os
 
