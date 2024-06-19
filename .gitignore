@@ -33,3 +33,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local supabase
+/supabase
+
+# local dev api
+/api/bin
+/api/lib
+/api/.env
+/api/pyvenv.cfg
+/api/__pycache__
