@@ -38,6 +38,7 @@ def login(request: LoginRequest):
 
 @app.post('/api/auth/signup')
 def signup(request: SignupRequest):
+    print("Received signup request")
     try:
         if user_exists(value=request.email):
             raise HTTPException(status_code=400, detail="User with this email already exists")
@@ -56,14 +57,3 @@ def signup(request: SignupRequest):
 @app.get("/api/python")
 def hello_world():
     return {"message": "Hello World, supabase connected"}
-
-def get_fastapi_url():
-    config = uvicorn.Config("api:app", host="127.0.0.1", port=8000, log_level="info")
-    server = uvicorn.Server(config)
-    url = f"http://{server.config.host}:{server.config.port}"
-    return url
-
-if __name__ == "__main__":
-    fastapi_url = get_fastapi_url()
-    print(f"FastAPI server is running at: {fastapi_url}")
-    uvicorn.run("api:app", host="127.0.0.1", port=8000, log_level="info")
