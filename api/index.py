@@ -10,11 +10,11 @@ origins = [
     "http://localhost:3000",  # Add the origin(s) you want to allow
 ]
 
-url: str = os.environ.get("SUPABASE_URL")
-key: str = os.environ.get("SUPABASE_KEY")
+#url: str = os.environ.get("SUPABASE_URL")
+#key: str = os.environ.get("SUPABASE_KEY")
 
 app = FastAPI()
-supabase: Client = create_client(url, key)
+#supabase: Client = create_client(url, key)
 
 # Add CORS middleware
 app.add_middleware(
