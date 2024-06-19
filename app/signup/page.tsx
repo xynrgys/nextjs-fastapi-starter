@@ -14,9 +14,9 @@ export default function SignUpPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   
-    const URL = process.env.NEXT_PUBLIC_VERCEL_URL
-      ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/auth/signup`
-      : "http://localhost:3000/api/auth/signup";
+    const isProduction = process.env.NODE_ENV === 'production';
+    const baseUrl = isProduction ? '' : 'http://127.0.0.1:8000';
+    const signupUrl = `${baseUrl}/api/auth/signup`;
   
     try {
       const response = await fetch(URL, {
