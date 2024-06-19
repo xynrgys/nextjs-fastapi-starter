@@ -1,5 +1,3 @@
-// app/signin.tsx
-
 'use client'
 
 import { useState } from 'react';
@@ -14,11 +12,11 @@ export default function SignInPage() {
     e.preventDefault();
 
     const URL = process.env.NEXT_PUBLIC_VERCEL_URL
-      ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-      : "http://localhost:3000";
+      ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/auth/login`
+      : "http://localhost:3000/api/auth/login";
 
     try {
-      const response = await fetch(URL+'/auth/login', {
+      const response = await fetch(URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -26,18 +24,17 @@ export default function SignInPage() {
         body: JSON.stringify({ email, password }),
       });
 
-      if (response.ok) {
-        // Handle successful login, e.g., redirect to dashboard
-        router.push('/dashboard'); // Redirect to dashboard page
-      } else {
-        // Handle login error
-        const data = await response.json();
-        console.error('Signin failed', data);
-        // Handle error message display or other logic
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
+
+      const data = await response.json();
+      console.log('Sign-in successful', data);
+      // Handle successful sign-in, e.g., redirect to a dashboard page
+      router.push('/dashboard'); // Assuming you have a dashboard page set up
     } catch (error) {
-      console.error('Signin failed', error);
-      // Handle network errors or other exceptions
+      console.error('Sign-in failed', error);
+      // Handle sign-in error, e.g., display an error message to the user
     }
   };
 

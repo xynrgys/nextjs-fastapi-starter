@@ -13,30 +13,33 @@ export default function SignUpPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+  
     const URL = process.env.NEXT_PUBLIC_VERCEL_URL
-      ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-      : "http://localhost:3000";
-
-    const response = await fetch(URL+'/api/auth/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name, email, password }),
-    });
-
-    const data = await response.json();
-    if (response.ok) {
-      // Handle successful signup, e.g., redirect to a login page
+      ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/auth/signup`
+      : "http://localhost:3000/api/auth/signup";
+  
+    try {
+      const response = await fetch(URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const data = await response.json();
       console.log('Signup successful', data);
       router.push('/signin'); // Assuming you have a login page set up
-    } else {
-      // Handle signup error
-      console.error('Signup failed', data);
+    } catch (error) {
+      console.error('Signup failed', error);
+      // Handle signup error, e.g., display an error message to the user
     }
   };
-
+  
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="w-full max-w-md p-8 bg-white rounded shadow-md">
