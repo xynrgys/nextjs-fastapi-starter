@@ -1,5 +1,4 @@
 from fastapi import FastAPI, HTTPException
-from typing import Union
 from supabase import create_client, Client
 from app.models import SignupRequest
 import bcrypt
