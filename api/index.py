@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from supabase import create_client, Client
-from app.models import SignupRequest
+from pydantic import BaseModel
 import os
 
 url: str = os.environ.get("SUPABASE_URL")
@@ -12,6 +12,14 @@ supabase: Client = create_client(url, key)
 def user_exists(key: str = "email", value: str = None):
     user = supabase.from_("users").select("*").eq(key, value).execute()
     return len(user.data) > 0
+
+class SignupRequest(BaseModel):
+    email: str
+    password: str
+
+class LoginRequest(BaseModel):
+    email: str
+    password: str
 
 @app.get("/api/python")
 def hello_world():
