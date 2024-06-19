@@ -38,16 +38,20 @@ def login(request: LoginRequest):
 
 @app.post('/api/auth/signup')
 def signup(request: SignupRequest):
-    if user_exists(value=request.email):
-        raise HTTPException(status_code=400, detail="User with this email already exists")
+    try:
+        if user_exists(value=request.email):
+            raise HTTPException(status_code=400, detail="User with this email already exists")
 
-    hashed_password = bcrypt.hashpw(request.password.encode('utf-8'), bcrypt.gensalt())
-    response = supabase.auth.sign_up(email=request.email, password=hashed_password.decode('utf-8'))
+        hashed_password = bcrypt.hashpw(request.password.encode('utf-8'), bcrypt.gensalt())
+        response = supabase.auth.sign_up(email=request.email, password=hashed_password.decode('utf-8'))
 
-    if response['error']:
-        raise HTTPException(status_code=400, detail=response['error']['message'])
+        if response['error']:
+            print(f"Supabase error: {response['error']}")
+            raise HTTPException(status_code=400, detail=response['error']['message'])
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
-    return response['data']
 
 @app.get("/api/python")
 def hello_world():
