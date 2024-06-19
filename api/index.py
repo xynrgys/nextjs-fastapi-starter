@@ -14,6 +14,7 @@ def user_exists(key: str = "email", value: str = None):
     return len(user.data) > 0
 
 class SignupRequest(BaseModel):
+    name: str
     email: str
     password: str
 
