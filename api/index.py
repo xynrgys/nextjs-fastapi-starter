@@ -58,9 +58,13 @@ def signup(request: SignupRequest):
         "password": request.password,
     }
 
-    res = supabase.auth.sign_up(credentials)
-    
-    if res.error:
-        raise HTTPException(status_code=400, detail=res.error.message)
-    
-    return {"message": "Signup successful"}
+    response = supabase.auth.sign_up(credentials)
+
+    if response.get('error'):
+        error_message = response['error']['message']
+        error_code = response['error']['code']
+        raise HTTPException(status_code=int(error_code), detail=error_message)
+    else:
+    # Handle the successful sign-up case
+        user_data = response['user']
+        return {"message": "Signup successful"}
