@@ -10,11 +10,12 @@ key: str = os.environ.get("SUPABASE_KEY")
 app = FastAPI()
 
 # Add CORS middleware
+origins = ["*"]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["POST", "GET"],
     allow_headers=["*"],
 )
 
@@ -25,6 +26,7 @@ def user_exists(key: str = "email", value: str = None):
     return len(user.data) > 0
 
 class SignupRequest(BaseModel):
+    name: str
     email: str
     password: str
 
