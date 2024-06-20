@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from supabase import create_client, Client
 from pydantic import BaseModel
+import json
 import os
 
 url: str = os.environ.get("SUPABASE_URL")
@@ -43,6 +44,7 @@ def hello_world():
     return {"message": "Hello World, supabase connected"}
 
 @app.post('/api/auth/signup', response_model=dict)
+
 def signup(request: SignupRequest):
     if request.name == "":
         raise HTTPException(status_code=400, detail="Name is required")
@@ -60,11 +62,13 @@ def signup(request: SignupRequest):
 
     response = supabase.auth.sign_up(credentials)
 
-    if response.get('error'):
-        error_message = response['error']['message']
-        error_code = response['error']['code']
+    if 'event_message' in response:
+        # Parse the event_message JSON string
+        event_message = json.loads(response['event_message'])
+        error_message = event_message['msg']
+        error_code = event_message['error'].split(':')[0]
+
         raise HTTPException(status_code=int(error_code), detail=error_message)
     else:
-    # Handle the successful sign-up case
-        user_data = response['user']
+        # Handle the successful sign-up case
         return {"message": "Signup successful"}

@@ -29,12 +29,21 @@ export default function SignUpPage() {
       });
   
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        const data = await response.json();
+        if (data.error) {
+          // Handle error response from FastAPI
+          const errorMessage = data.error;
+          const errorCode = data.code;
+          alert(`Error ${errorCode}: ${errorMessage}`);
+        } else {
+          throw new Error('Network response was not ok');
+        }
+      } else {
+        const data = await response.json();
+        console.log('Signup successful', data);
+        alert('Signup successful');
+        router.push('/signin'); // Assuming you have a login page set up
       }
-  
-      const data = await response.json();
-      console.log('Signup successful', data);
-      router.push('/signin'); // Assuming you have a login page set up
     } catch (error) {
       console.error('Signup failed', error);
       // Handle signup error, e.g., display an error message to the user
