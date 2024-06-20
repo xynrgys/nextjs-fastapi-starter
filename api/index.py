@@ -53,12 +53,9 @@ def signup(request: SignupRequest):
     if request.password == "":
         raise HTTPException(status_code=400, detail="Password is required")
     
-    if user_exists(value=request.email):
-        raise HTTPException(status_code=400, detail="User with this email already exists")
+    response = supabase.auth.sign_up(request)
 
-    # response = supabase.auth.sign_up(email=request.email, password=request.password)
-
-    # if response['error']:
-    #     raise HTTPException(status_code=400, detail=response['error']['message'])
+    if response['error']:
+        raise HTTPException(status_code=400, detail=response['error']['message'])
 
     return {"message": "Signup successful"}
