@@ -44,18 +44,21 @@ def hello_world():
 
 @app.post('/api/auth/signup', response_model=dict)
 def signup(request: SignupRequest):
-    # if user_exists(value=request.email):
-    #     raise HTTPException(status_code=400, detail="User with this email already exists")
+    if request.name == "":
+        raise HTTPException(status_code=400, detail="Name is required")
+    
+    if request.email == "":
+        raise HTTPException(status_code=400, detail="Email is required")
+    
+    if request.password == "":
+        raise HTTPException(status_code=400, detail="Password is required")
+    
+    if user_exists(value=request.email):
+        raise HTTPException(status_code=400, detail="User with this email already exists")
 
     # response = supabase.auth.sign_up(email=request.email, password=request.password)
 
     # if response['error']:
     #     raise HTTPException(status_code=400, detail=response['error']['message'])
-    if request.name == "":
-        raise HTTPException(status_code=400, detail="Name is required")
-    if request.email == "":
-        raise HTTPException(status_code=400, detail="Email is required")
-    if request.password == "":
-        raise HTTPException(status_code=400, detail="Password is required")
 
     return {"message": "Signup successful"}
