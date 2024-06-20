@@ -53,13 +53,12 @@ def signup(request: SignupRequest):
     if request.password == "":
         raise HTTPException(status_code=400, detail="Password is required")
     
-    res = supabase.auth.sign_up(
-        email = request.email,
-        password = request.password,
-        data= {
-            name = request.name,
-        }
-    )
+    credentials = {
+        "email": request.email,
+        "password": request.password,
+    }
+
+    res = supabase.auth.sign_up(credentials)
 
     if res['error']:
         raise HTTPException(status_code=400, detail=res['error']['message'])
