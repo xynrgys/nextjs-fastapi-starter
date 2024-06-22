@@ -9,7 +9,7 @@ export default function SignInPage() {
   const [password, setPassword] = useState('');
   const router = useRouter();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const isProduction = process.env.NODE_ENV === 'production';
