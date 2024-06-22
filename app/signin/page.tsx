@@ -2,12 +2,10 @@
 
 import { useState } from 'react';
 import Cookies from 'js-cookie';
-import { useRouter } from 'next/router';
 
 export default function SignInPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
