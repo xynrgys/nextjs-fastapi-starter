@@ -3,8 +3,13 @@
 import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
 
+interface User {
+  email: string;
+  // Add any other properties you expect in the user data
+}
+
 export default function DashboardPage() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const accessToken = Cookies.get('access_token');
