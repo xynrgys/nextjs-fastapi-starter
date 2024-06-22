@@ -33,13 +33,3 @@ export default async function DashboardPage() {
     };
   }
 }
-
-export default function DashboardPage({ user }) {
-  return (
-    <div>
-      <h1>Dashboard</h1>
-      <p>Welcome, {user.email}!</p>
-      {/* Render private content */}
-    </div>
-  );
-}
