@@ -1,22 +1,23 @@
 'use client'
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/router';
 
 export default function SignInPage() {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const URL = process.env.NEXT_PUBLIC_VERCEL_URL
-      ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/auth/login`
-      : "http://localhost:3000/api/auth/login";
+    const isProduction = process.env.NODE_ENV === 'production';
+    const baseUrl = isProduction ? '' : 'http://127.0.0.1:8000';
+    const signinUrl = `${baseUrl}/api/auth/signin`;
 
     try {
-      const response = await fetch(URL, {
+      const response = await fetch(signinUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -24,17 +25,17 @@ export default function SignInPage() {
         body: JSON.stringify({ email, password }),
       });
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
+      if (response.ok) {
+        const { token } = await response.json();
+        Cookies.set('token', token); // Store JWT token in a cookie
+        router.push('/dashboard'); // Redirect to a private page
+      } else {
+        // Handle sign-in error
+        const error = await response.json();
+        console.error('Sign-in failed:', error);
       }
-
-      const data = await response.json();
-      console.log('Sign-in successful', data);
-      // Handle successful sign-in, e.g., redirect to a dashboard page
-      router.push('/dashboard'); // Assuming you have a dashboard page set up
     } catch (error) {
-      console.error('Sign-in failed', error);
-      // Handle sign-in error, e.g., display an error message to the user
+      console.error('Sign-in failed:', error);
     }
   };
 

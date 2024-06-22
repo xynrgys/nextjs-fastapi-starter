@@ -44,7 +44,6 @@ def hello_world():
     return {"message": "Hello World, supabase connected"}
 
 @app.post('/api/auth/signup', response_model=dict)
-
 def signup(request: SignupRequest):
     if request.name == "":
         raise HTTPException(status_code=400, detail="Name is required")
@@ -72,3 +71,22 @@ def signup(request: SignupRequest):
     else:
         # Handle the successful sign-up case
         return {"message": "Signup successful"}
+
+@app.post('/api/auth/signin')
+def signin(request: LoginRequest):
+    credentials = {
+        "email": request.email,
+        "password": request.password,
+    }
+
+    response = supabase.auth.sign_in(credentials)
+
+    if 'error' in response:
+        # Handle sign-in error
+        raise HTTPException(status_code=401, detail=response['error']['message'])
+
+    # Generate JWT token with user information
+    user_data = response['user']
+    token = generate_jwt_token(user_data)
+
+    return {"token": token}
