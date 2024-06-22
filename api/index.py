@@ -22,14 +22,14 @@ app.add_middleware(
 
 supabase: Client = create_client(url, key)
 
-async def verify_access_token(access_token: str = Depends()):
-    try:
-        response = supabase.auth.get_user(access_token)
-        if 'error' in response:
-            raise HTTPException(status_code=401, detail=response['error']['message'])
-        return response['user']
-    except Exception as e:
-        raise HTTPException(status_code=401, detail=str(e))
+# async def verify_access_token(access_token: str = Depends()):
+#     try:
+#         response = supabase.auth.get_user(access_token)
+#         if 'error' in response:
+#             raise HTTPException(status_code=401, detail=response['error']['message'])
+#         return response['user']
+#     except Exception as e:
+#         raise HTTPException(status_code=401, detail=str(e))
 
 def user_exists(key: str = "email", value: str = None):
     user = supabase.from_("users").select("*").eq(key, value).execute()
