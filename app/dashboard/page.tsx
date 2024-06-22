@@ -1,49 +1,56 @@
+'use client'
+
 import Cookies from 'js-cookie';
+import { useEffect, useState } from 'react';
 
-export default async function DashboardPage() {
-  const accessToken = Cookies.get('access_token');
+export default function DashboardPage() {
+  const [user, setUser] = useState(null);
 
-  if (!accessToken) {
-    return {
-      redirect: {
-        destination: '/signin',
-        permanent: false,
-      },
-    };
-  }
+  useEffect(() => {
+    const accessToken = Cookies.get('access_token');
 
-  try {
-    const response = await fetch('/api/protected', {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-      },
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      return (
-        <div>
-          <h1>Dashboard</h1>
-          <p>{data.message}</p>
-          {/* Render private content */}
-        </div>
-      );
-    } else {
-      // Handle unauthorized access
-      return {
-        redirect: {
-          destination: '/signin',
-          permanent: false,
-        },
-      };
+    if (!accessToken) {
+      window.location.href = '/signin';
+      return;
     }
-  } catch (error) {
-    console.error('Failed to fetch protected data:', error);
-    return {
-      redirect: {
-        destination: '/signin',
-        permanent: false,
-      },
+
+    const fetchUserData = async () => {
+      try {
+        const isProduction = process.env.NODE_ENV === 'production';
+        const baseUrl = isProduction ? '' : 'http://127.0.0.1:8000';
+        const protectedUrl = `${baseUrl}/api/protected`;
+
+        const response = await fetch(protectedUrl, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data.user);
+        } else {
+          // Handle unauthorized access
+          window.location.href = '/signin';
+        }
+      } catch (error) {
+        console.error('Failed to fetch user data:', error);
+        window.location.href = '/signin';
+      }
     };
+
+    fetchUserData();
+  }, []);
+
+  if (!user) {
+    return <div>Loading...</div>;
   }
+
+  return (
+    <div>
+      <h1>Dashboard</h1>
+      <p>Welcome, {user.email}!</p>
+      {/* Render private content */}
+    </div>
+  );
 }
