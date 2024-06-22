@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from supabase import create_client, Client
 from pydantic import BaseModel
@@ -21,6 +21,15 @@ app.add_middleware(
 )
 
 supabase: Client = create_client(url, key)
+
+async def verify_access_token(access_token: str = Depends()):
+    try:
+        response = supabase.auth.get_user(access_token)
+        if 'error' in response:
+            raise HTTPException(status_code=401, detail=response['error']['message'])
+        return response['user']
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=str(e))
 
 def user_exists(key: str = "email", value: str = None):
     user = supabase.from_("users").select("*").eq(key, value).execute()
@@ -85,8 +94,12 @@ def signin(request: LoginRequest):
         # Handle sign-in error
         raise HTTPException(status_code=401, detail=response['error']['message'])
 
-    # Generate JWT token with user information
-    user_data = response['user']
-    token = generate_jwt_token(user_data)
+    # Get the user's access token from Supabase
+    access_token = response['access_token']
 
-    return {"token": token}
+    return {"access_token": access_token}
+
+@app.get('/api/protected')
+def protected_endpoint(user=Depends(verify_access_token)):
+    # Access the user data from the verified access token
+    return {"message": f"Hello, {user['email']}!"}

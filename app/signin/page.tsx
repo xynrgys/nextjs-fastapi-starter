@@ -26,8 +26,8 @@ export default function SignInPage() {
       });
 
       if (response.ok) {
-        const { token } = await response.json();
-        Cookies.set('token', token); // Store JWT token in a cookie
+        const { access_token } = await response.json();
+        Cookies.set('access_token', access_token); // Store the access token in a cookie
         router.push('/dashboard'); // Redirect to a private page
       } else {
         // Handle sign-in error

@@ -1,10 +1,9 @@
 import Cookies from 'js-cookie';
-import jwt from 'jsonwebtoken';
 
 export default async function DashboardPage() {
-  const token = Cookies.get('token');
+  const accessToken = Cookies.get('access_token');
 
-  if (!token) {
+  if (!accessToken) {
     return {
       redirect: {
         destination: '/signin',
@@ -14,17 +13,32 @@ export default async function DashboardPage() {
   }
 
   try {
-    const decoded = jwt.verify(token, 'your_secret_key');
-    const user = decoded.user; // Assuming the JWT payload contains user information
+    const response = await fetch('/api/protected', {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    });
 
-    return (
-      <div>
-        <h1>Dashboard</h1>
-        <p>Welcome, {user.email}!</p>
-        {/* Render private content */}
-      </div>
-    );
+    if (response.ok) {
+      const data = await response.json();
+      return (
+        <div>
+          <h1>Dashboard</h1>
+          <p>{data.message}</p>
+          {/* Render private content */}
+        </div>
+      );
+    } else {
+      // Handle unauthorized access
+      return {
+        redirect: {
+          destination: '/signin',
+          permanent: false,
+        },
+      };
+    }
   } catch (error) {
+    console.error('Failed to fetch protected data:', error);
     return {
       redirect: {
         destination: '/signin',
