@@ -82,4 +82,4 @@ def signin(request: LoginRequest):
         # Handle sign-in error
         raise HTTPException(status_code=401, detail=response['error']['message'])
 
-    return response
+    return json.dumps(response)
