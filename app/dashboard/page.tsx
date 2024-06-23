@@ -23,7 +23,7 @@ export default function DashboardPage() {
       return;
     }
 
-    const supabaseClient = createClient(process.env.SUPABASE_URL!,process.env.SUPABASE_KEY!);
+    const supabaseClient = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!,process.env.NEXT_PUBLIC_SUPABASE_KEY!);
 
     const fetchUserData = async () => {
       const { data: { user } } = await supabaseClient.auth.getUser(accessToken);
