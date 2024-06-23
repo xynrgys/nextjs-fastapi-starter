@@ -1,39 +1,34 @@
-'use client'
+'use client';
 
 import { useState } from 'react';
+import { createClient } from '@supabase/supabase-js'
+import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 
 export default function SignInPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const isProduction = process.env.NODE_ENV === 'production';
-    const baseUrl = isProduction ? '' : 'http://127.0.0.1:8000';
-    const signinUrl = `${baseUrl}/api/auth/signin`;
+    const supabaseClient = createClient(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_KEY!
+    );
 
-    try {
-      const response = await fetch(signinUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
+    const { error } = await supabaseClient.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-      if (response.ok) {
-        const { access_token } = await response.json();
-        Cookies.set('access_token', access_token.session.access_token); // Store the access token in a cookie
-        window.location.href = '/dashboard'; // Redirect to the dashboard page
-      } else {
-        // Handle sign-in error
-        const error = await response.json();
-        console.error('Sign-in failed:', error);
-      }
-    } catch (error) {
-      console.error('Sign-in failed:', error);
+    if (error) {
+      console.error('Sign-in failed:', error.message);
+    } else {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      Cookies.set('access_token', session.access_token);
+      router.push('/dashboard');
     }
   };
 
@@ -43,7 +38,9 @@ export default function SignInPage() {
         <h2 className="mb-6 text-2xl text-black font-semibold text-center">Sign In</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-600">Email</label>
+            <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-600">
+              Email
+            </label>
             <input
               type="email"
               id="email"
@@ -55,7 +52,9 @@ export default function SignInPage() {
             />
           </div>
           <div className="mb-6">
-            <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-600">Password</label>
+            <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-600">
+              Password
+            </label>
             <input
               type="password"
               id="password"

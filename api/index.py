@@ -42,7 +42,6 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 
-
 @app.options("/api/auth/signup")
 def catch_options():
     return {"message": "OK"}
@@ -82,19 +81,3 @@ def signup(request: SignupRequest):
     else:
         # Handle the successful sign-up case
         return {"message": "Signup successful"}
-
-
-@app.post('/api/auth/signin')
-def signin(request: LoginRequest):
-    credentials = {
-        "email": request.email,
-        "password": get_password_hash(request.password),
-    }
-
-    response = supabase.auth.sign_in_with_password(credentials)
-
-    if 'error' in response:
-        # Handle sign-in error
-        raise HTTPException(status_code=401, detail=response['error']['message'])
-
-    return JSONResponse(content=response)
