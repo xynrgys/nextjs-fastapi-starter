@@ -28,7 +28,7 @@ async def verify_access_token(access_token: str = Depends()):
         response = supabase.auth.get_user(access_token)
         if 'error' in response:
             raise HTTPException(status_code=401, detail=response['error']['message'])
-        return response['user']
+        return response
     except Exception as e:
         raise HTTPException(status_code=401, detail=str(e))
 
@@ -101,6 +101,6 @@ def signin(request: LoginRequest):
     return {"access_token": access_token}
 
 @app.get('/api/protected')
-def protected_endpoint(user=Depends(verify_access_token)):
+def protected_endpoint(commons: dict=Depends(verify_access_token)):
     # Access the user data from the verified access token
-    return user
+    return commons
