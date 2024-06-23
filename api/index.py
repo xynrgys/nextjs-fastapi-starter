@@ -1,4 +1,5 @@
 from fastapi import Depends, FastAPI, HTTPException
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from supabase import create_client, Client
 from pydantic import BaseModel
@@ -82,4 +83,4 @@ def signin(request: LoginRequest):
         # Handle sign-in error
         raise HTTPException(status_code=401, detail=response['error']['message'])
 
-    return json.dumps(response)
+    return JSONResponse(content=response)
