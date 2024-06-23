@@ -103,4 +103,4 @@ def signin(request: LoginRequest):
 @app.get('/api/protected')
 def protected_endpoint(user=Depends(verify_access_token)):
     # Access the user data from the verified access token
-    return {"message": f"Hello, {user['email']}!"}
+    return user
