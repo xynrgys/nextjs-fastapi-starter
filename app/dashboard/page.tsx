@@ -1,12 +1,18 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 
+interface User {
+  id: string;
+  email: string;
+  // Add any other properties you expect in the user data
+}
+
 export default function DashboardPage() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -18,13 +24,21 @@ export default function DashboardPage() {
     }
 
     const supabaseClient = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_KEY!
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     );
 
     const fetchUserData = async () => {
       const { data: { user } } = await supabaseClient.auth.getUser(accessToken);
-      setUser(user);
+      if (user) {
+        setUser({
+          id: user.id,
+          email: user.email || '', 
+          // Add any other properties you expect in the user data
+        });
+      } else {
+        setUser(null);
+      }
     };
 
     fetchUserData();

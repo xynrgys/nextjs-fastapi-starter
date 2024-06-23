@@ -27,8 +27,10 @@ export default function SignInPage() {
       console.error('Sign-in failed:', error.message);
     } else {
       const { data: { session } } = await supabaseClient.auth.getSession();
-      Cookies.set('access_token', session.access_token);
-      router.push('/dashboard');
+      if (session) {
+        Cookies.set('access_token', session.access_token);
+        router.push('/dashboard');
+      }
     }
   };
 
