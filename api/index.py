@@ -7,6 +7,7 @@ import os
 
 url: str = os.environ.get("SUPABASE_URL")
 key: str = os.environ.get("SUPABASE_KEY")
+SUPABASE_JWT_SECRET = os.environ.get("SUPABASE_JWT_SECRET")
 
 app = FastAPI()
 
@@ -99,7 +100,7 @@ def signin(request: LoginRequest):
 
     return {"access_token": access_token}
 
-# @app.get('/api/protected')
-# def protected_endpoint(user=Depends(verify_access_token)):
-#     # Access the user data from the verified access token
-#     return {"message": f"Hello, {user['email']}!"}
+@app.get('/api/protected')
+def protected_endpoint(user=Depends(verify_access_token)):
+    # Access the user data from the verified access token
+    return {"message": f"Hello, {user['email']}!"}
