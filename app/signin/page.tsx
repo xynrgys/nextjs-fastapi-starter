@@ -13,10 +13,7 @@ export default function SignInPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const supabaseClient = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_KEY!
-    );
+    const supabaseClient = createClient(process.env.SUPABASE_URL!,process.env.SUPABASE_KEY!);
 
     const { error } = await supabaseClient.auth.signInWithPassword({
       email,
