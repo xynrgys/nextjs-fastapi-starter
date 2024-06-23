@@ -23,19 +23,6 @@ app.add_middleware(
 
 supabase: Client = create_client(url, key)
 
-async def verify_access_token(access_token: str = Depends()):
-    try:
-        response = supabase.auth.get_user(access_token)
-        if 'error' in response:
-            raise HTTPException(status_code=401, detail=response['error']['message'])
-        return response
-    except Exception as e:
-        raise HTTPException(status_code=401, detail=str(e))
-
-def user_exists(key: str = "email", value: str = None):
-    user = supabase.from_("users").select("*").eq(key, value).execute()
-    return len(user.data) > 0
-
 class SignupRequest(BaseModel):
     email: str
     name: str
@@ -95,12 +82,4 @@ def signin(request: LoginRequest):
         # Handle sign-in error
         raise HTTPException(status_code=401, detail=response['error']['message'])
 
-    # Get the user's access token from Supabase
-    access_token = response['access_token']
-
-    return {"access_token": access_token}
-
-@app.get('/api/protected')
-def protected_endpoint(commons: dict=Depends(verify_access_token)):
-    # Access the user data from the verified access token
-    return commons
+    return response

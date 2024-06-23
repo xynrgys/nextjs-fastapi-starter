@@ -25,7 +25,7 @@ export default function SignInPage() {
 
       if (response.ok) {
         const { access_token } = await response.json();
-        Cookies.set('access_token', access_token); // Store the access token in a cookie
+        Cookies.set('access_token', access_token.session.access_token); // Store the access token in a cookie
         window.location.href = '/dashboard'; // Redirect to the dashboard page
       } else {
         // Handle sign-in error
