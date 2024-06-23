@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@/utils/supabase/server';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 
@@ -23,7 +23,7 @@ export default function DashboardPage() {
       return;
     }
 
-    const supabaseClient = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!,process.env.NEXT_PUBLIC_SUPABASE_KEY!);
+    const supabaseClient = createClient();
 
     const fetchUserData = async () => {
       const { data: { user } } = await supabaseClient.auth.getUser(accessToken);

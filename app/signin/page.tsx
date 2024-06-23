@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@/utils/supabase/server';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 
@@ -13,7 +13,7 @@ export default function SignInPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const supabaseClient = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!,process.env.NEXT_PUBLIC_SUPABASE_KEY!);
+    const supabaseClient = createClient();
 
     const { error } = await supabaseClient.auth.signInWithPassword({
       email,

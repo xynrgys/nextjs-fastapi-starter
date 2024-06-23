@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@supabase/auth-helpers-nextjs": "^0.10.0",
+    "@supabase/ssr": "^0.3.0",
     "@supabase/supabase-js": "^2.43.5",
     "@types/node": "20.2.4",
     "@types/react": "18.2.7",
