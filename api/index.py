@@ -76,7 +76,7 @@ def signin(request: LoginRequest):
         "password": request.password,
     }
 
-    response = supabase.auth.sign_in(credentials)
+    response = supabase.auth.sign_in_with_password(credentials)
 
     if 'error' in response:
         # Handle sign-in error
