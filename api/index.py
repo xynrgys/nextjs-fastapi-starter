@@ -3,8 +3,10 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from supabase import create_client, Client
 from pydantic import BaseModel
+from passlib.context import CryptContext
 import json
 import os
+import jwt
 
 url: str = os.environ.get("SUPABASE_URL")
 key: str = os.environ.get("SUPABASE_KEY")
@@ -33,13 +35,23 @@ class LoginRequest(BaseModel):
     email: str
     password: str
 
+#pass hashing
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def get_password_hash(password):
+    return pwd_context.hash(password)
+
+
+
 @app.options("/api/auth/signup")
 def catch_options():
     return {"message": "OK"}
 
+
 @app.get("/api/python")
 def hello_world():
     return {"message": "Hello World, supabase connected"}
+
 
 @app.post('/api/auth/signup', response_model=dict)
 def signup(request: SignupRequest):
@@ -52,9 +64,10 @@ def signup(request: SignupRequest):
     if request.password == "":
         raise HTTPException(status_code=400, detail="Password is required")
     
+    
     credentials = {
         "email": request.email,
-        "password": request.password,
+        "password": get_password_hash(request.password),
     }
 
     response = supabase.auth.sign_up(credentials)
@@ -70,11 +83,12 @@ def signup(request: SignupRequest):
         # Handle the successful sign-up case
         return {"message": "Signup successful"}
 
+
 @app.post('/api/auth/signin')
 def signin(request: LoginRequest):
     credentials = {
         "email": request.email,
-        "password": request.password,
+        "password": get_password_hash(request.password),
     }
 
     response = supabase.auth.sign_in_with_password(credentials)
